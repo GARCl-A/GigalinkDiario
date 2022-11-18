@@ -1,0 +1,27 @@
+SELECT
+  EXTRACT(DAY from date) as TestDay,
+  EXTRACT(MONTH from date) as TestMonth,
+  EXTRACT(YEAR from date) as TestYear,
+  MIN(a.MeanThroughputMbps) as DailyMinMeanThroughputMbps,
+  MIN(a.MinRTT) as DailyMinMinRTTDay,
+  MIN(a.LossRate) as DailyMinLossRate,
+  MAX(a.MeanThroughputMbps) as DailyMaxMeanThroughputMbps,
+  MAX(a.MinRTT) as DailyMaxMinRTTDay,
+  MAX(a.LossRate) as DailyMaxLossRate,
+  server.Site as ServerSite
+FROM
+  `measurement-lab.ndt.ndt7`
+WHERE 
+  date BETWEEN "2020-06-06" AND "2022-11-17"
+  AND raw.Download.UUID IS NOT NULL
+  AND client.Network.ASNumber = 28658
+GROUP BY
+  TestDay,
+  TestMonth,
+  TestYear,
+  ServerSite
+ORDER BY 
+  TestYear,
+  TestMonth,
+  TestDay,
+  ServerSite
